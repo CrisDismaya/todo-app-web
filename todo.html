@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" data-sidenav-size="fullscreen">
+<!-- Mirrored from coderthemes.com/hyper/saas/layouts-fullscreen.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 22 Jan 2024 04:34:31 GMT -->
+<head>
+	<meta charset="utf-8" />
+	<title>To-do Application</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- App favicon -->
+	<link rel="shortcut icon" href="assets/images/favicon.ico">
+
+	<!-- Daterangepicker css -->
+	<link rel="stylesheet" href="assets/vendor/daterangepicker/daterangepicker.css">
+
+	<!-- Vector Map css -->
+	<link rel="stylesheet" href="assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css">
+
+	<!-- Theme Config Js -->
+	<script src="assets/js/hyper-config.js"></script>
+
+	<!-- App css -->
+	<link href="assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
+
+	<!-- Icons css -->
+	<link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="wrapper">
+		<!-- ========== Topbar Start ========== -->
+		<div class="navbar-custom ms-0">
+			<div class="topbar container-fluid">
+				<div class="d-flex align-items-center gap-lg-2 gap-1">
+					<!-- <ul class="topbar-menu d-flex align-items-center gap-3">
+						<li class="dropdown notification-list">
+							<a class="nav-link dropdown-toggle arrow-none" href="#" role="button">
+								 <h5 class="my-0"> To-do </h5>
+							</a>
+						</li>
+						<li class="dropdown notification-list">
+							<a class="nav-link dropdown-toggle arrow-none" href="#" role="button">
+								 <h5 class="my-0"> Task Trash </h5>
+							</a>
+						</li>
+					</ul> -->
+				</div>
+
+				<ul class="topbar-menu d-flex align-items-center gap-3">
+					<li class="dropdown">
+						<a class="nav-link arrow-none nav-user px-2" href="#" role="button">
+							<span class="d-lg-flex flex-column gap-1">
+								<h5 id="user-name" class="my-0">Name</h5>
+							</span>
+						</a>
+					</li>
+
+					<li class="dropdown notification-list">
+						<a class="nav-link dropdown-toggle arrow-none" href="#" role="button"  onclick="logout()">
+							<i class="ri-logout-box-line font-22"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- ========== Topbar End ========== -->
+
+		<!-- ============================================================== -->
+		<!-- Start Page Content here -->
+		<!-- ============================================================== -->
+
+		<div class="content-page ms-0">
+			<div class="content">
+				<!-- Start Content-->
+				<div class="container-fluid">
+					
+					<div class="row pt-3">
+						<div class="col-xl-12 col-lg-12">
+							<div class="card card-h-100">
+								<div class="d-flex card-header justify-content-between align-items-center">
+									<h4 class="header-title"> To-do List</h4>
+									<div class="dropdown">
+										<a href="javascript:void(0);" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#task-modal" onclick="clearFields()">
+											<i class="mdi mdi-plus"></i> Add Task
+										</a>
+									</div>
+								</div>
+								<div class="card-body pt-0">
+									<div class="row mb-2">
+										<div class="col-xl-8">
+											<form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+												<div class="col-auto">
+													<div class="d-flex align-items-center">
+														<label for="status-select" class="me-2">Show</label>
+														<select class="form-select" id="table-pages">
+															<option value="5" selected>5</option>
+															<option value="10">10</option>
+															<option value="30">30</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-auto">
+													<div class="d-flex align-items-center">
+														<label for="status-select" class="me-2">Status</label>
+														<select class="form-select" id="table-status-filter">
+															<option value="All" selected>All</option>
+															<option value="To-do">To-do</option>
+															<option value="In-progress">In-progress</option>
+															<option value="Done">Done</option>
+														</select>
+													</div>
+												</div>
+											</form>                            
+										</div>
+										<div class="col-xl-4">
+											<div class="text-xl-end mt-xl-0 mt-2">
+												<div class="col-auto">
+													<label for="table-search-filter" class="visually-hidden">Search</label>
+													<input type="text" class="form-control" id="table-search-filter" placeholder="Search...">
+												</div>
+											</div>
+										</div><!-- end col-->
+									</div>
+			
+									<div class="table-responsive">
+										<table id="task-table" class="table table-centered table-nowrap mb-0">
+											<thead class="table-light">
+												<tr>
+													<th>ID</th>
+													<th>Title</th>
+													<th>Status</th>
+													<th>Published</th>
+													<th>Start Date</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody id="task-table-body"> </tbody>
+											<tfoot id="task-table-foot">
+												<tr>
+													<td class="text-center" colspan="6"> No result found </td>
+												</tr>
+											</tfoot>
+										</table>
+
+										<!-- End Align -->
+										<nav aria-label="Page navigation example" id="table-paging">
+											<div class="pagination justify-content-end pt-1">
+												<div class="col-auto">
+													<div class="d-flex align-items-center">
+														<label for="status-select" class="me-2">Page</label>
+														<div class="input-group input-group-merge" style="width: 120px !important;">
+															<input type="text" id="task-page" class="form-control text-end" value="1">
+															<div class="input-group-text">
+																/ &nbsp; <span id="table-maxpage">0</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+										</nav>
+									</div>
+								</div>
+								
+							</div> <!-- end card-->
+
+						</div> <!-- end col -->
+					</div>
+					<!-- end row -->
+
+				</div>
+				<!-- container -->
+			</div>
+			<!-- content -->
+		</div>
+	</div>
+	<!-- END wrapper -->
+
+	<div class="modal fade" id="task-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="task-modal-title" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="task-modal-title">Task</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="mb-2 row">
+						<label for="task-title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control form-control-sm" id="task-title" placeholder="Enter task title" maxlength="100">
+							<p class="error-message text-danger" id="title-error"></p>
+						</div>
+					</div>
+					<div class="mb-2 row">
+						<label for="task-content" class="col-sm-2 col-form-label col-form-label-sm">Content</label>
+						<div class="col-sm-10">
+							<textarea class="form-control form-control-sm" id="task-content" rows="5" placeholder="Enter task content"></textarea>
+							<p class="error-message text-danger" id="content-error"></p>
+						</div>
+					</div>
+					<div class="mb-2 row">
+						<label class="col-sm-2 col-form-label col-form-label-sm">Attachments <small><span class="text-muted">(Optional)</span></small></label>
+						<div class="col-sm-10">
+							<input type="file" id="task-attachment" name="task-attachment[]" class="form-control form-control-sm" accept="image/*" multiple>
+							<small><i><span class="text-muted">Note: Upload attachement below 4MB</span></i></small>
+
+							<div id="task-attachment-preview" class="row mx-n1 g-0">
+
+							</div>
+						</div>
+					</div>
+					<div class="mb-2 row">
+						<label for="task-status" class="col-sm-2 col-form-label col-form-label-sm">Status</label>
+						<div class="col-sm-10">
+							<select class="form-select form-control-sm" id="task-status">
+								<option value="">Select Status</option>
+								<option value="0">To-do</option>
+								<option value="1">In-progress</option>
+								<option value="2">Done</option>
+							</select>
+							<p class="error-message text-danger" id="status-error"></p>
+						</div>
+					</div>
+					<div class="mb-2 row">
+						<label for="task-title" class="col-sm-2 col-form-label col-form-label-sm">Published</label>
+						<div class="col-sm-10" style="vertical-align:middle;">
+							<input type="checkbox" id="task-publish" checked data-switch="bool"/>
+							<label for="task-publish" data-on-label="On" data-off-label="Off"></label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button id="task-action" type="button" class="btn btn-success" data-update-id="0">
+						<span id="title">Save</span>
+						<span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>
+					</button>
+				</div> <!-- end modal footer -->
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<!-- Vendor js -->
+	<script src="assets/js/vendor.min.js"></script>
+
+	<!-- App js -->
+	<script src="assets/js/general.js"></script>
+	<script src="assets/js/pages/demo.todo.js"></script>
+	<script src="assets/js/app.min.js"></script>
+
+</body>
+</html> 
