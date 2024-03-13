@@ -13,6 +13,11 @@ const buttonText = button.find('#title');
 const buttonSpinner = button.find('#spinner');
 const taskModal = $('#task-modal');
 
+let subTaskCounter = 0;
+const subTask = $('#task-subtask-title');
+const subTaskButton = $('#task-subtask-add');
+const subTaskList = $('#task-subtask-list');
+
 const itemsPerPage = $('#table-pages')
 const table = $('#task-table');
 const tableBody = table.find('#task-table-body');
@@ -94,6 +99,28 @@ $(document).ready(function() {
 		});
 	});
 
+	subTaskButton.on('click', function(){
+		const title = subTask.val()
+		if(title != ''){
+			subTaskList.prepend(`
+				<li class="list-group-item d-flex justify-content-between align-items-center" id="subTask-item-${ subTaskCounter }">
+					<div>
+						<input class="form-check-input me-1" type="checkbox" value="" id="subTask-${ subTaskCounter }">
+						<label class="form-check-label" for="subTask-${ subTaskCounter }"  id="subTask-title-${ subTaskCounter }">${ title }</label>
+					</div>
+					<i class="ri-delete-bin-line" role="button" onclick="deleteSubTask('subTask-item-${ subTaskCounter }')"></i>
+				</li>
+			`);
+
+			subTask.val('')
+			subTaskCounter = subTaskCounter + 1;
+		}
+		else {
+			alert('Subtask Title is required')
+			return;
+		}
+	});
+
 	$('#task-action').on('click', function(){
 		addItem()
 	});
@@ -110,6 +137,10 @@ function clearFields(){
 	$('.error-message').text('');
 	imageCounter = 0
 	imageStorage = []
+	subTaskCounter = 0;
+	subTaskStorage = [];
+	subTask.val('')
+	subTaskList.empty()
 }
 
 async function taskList(){
@@ -190,11 +221,11 @@ function displayItems(data, itemsPerPage) {
 	
 	tableBody.empty();
 	itemsToShow.forEach(item => {
-		addRows(item.id, item.title, item.status, item.is_published, item.created_at);
+		addRows(item.id, item.title, item.subtask, item.status, item.is_published, item.created_at);
 	});
 }
 
-function addRows(id, title, status, is_published, created_at, rowId = 0){
+function addRows(id, title, subtask, status, is_published, created_at, rowId = 0){
 	let status_color = '';
 	let status_value = '';
 	switch (status) {
@@ -215,11 +246,32 @@ function addRows(id, title, status, is_published, created_at, rowId = 0){
 	const publish_color = (is_published == '1' ? 'success' : 'warning')
 	const publish_value = (is_published == '1' ? 'Published' : 'Save as Draft')
 
+	let subtaskCounter = 0;
+	const jsonSubtask = JSON.parse(subtask);
+	for (let i = 0; i < jsonSubtask.length; i++) {
+		const el = jsonSubtask[i];
+		if(el.is_done === true){
+			subtaskCounter = subtaskCounter + 1;
+		}
+	}
+	const percent =  ((subtaskCounter / jsonSubtask.length) * 100).toFixed(2)
+	
+
 	if(rowId == 0){
 		const row = `
 			<tr id="row-${ id }">
 				<td > #${ id } </td>
 				<td class="fw-bold"> ${ title } </td>
+				<td class="fw-bold"> 
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item p-0">
+							<p class="mb-1 fw-bold text-end"> ${ percent }% </p>
+							<div class="progress progress-sm">
+								<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: ${ percent }%;"></div>
+							</div>
+						</li>
+					</ul>
+				</td>
 				<td>
 					<span class="badge badge-${ status_color }-lighten">${ status_value }</span>
 				</td>
@@ -243,9 +295,19 @@ function addRows(id, title, status, is_published, created_at, rowId = 0){
 		if (existingRow.length > 0) {
 			existingRow.find('td:eq(0)').text(`#${ id }`);
 			existingRow.find('td:eq(1)').text(title);
-			existingRow.find('td:eq(2)').html(`<span class="badge badge-${status_color}-lighten">${status_value}</span>`);
-			existingRow.find('td:eq(3)').html(`<span class="badge badge-${publish_color}-lighten">${publish_value}</span>`);
-			existingRow.find('td:eq(4)').text(formatDate(created_at));
+			existingRow.find('td:eq(2)').html(`
+				<ul class="list-group list-group-flush">
+						<li class="list-group-item p-0">
+						<p class="mb-1 fw-bold text-end"> ${ percent }% </p>
+						<div class="progress progress-sm">
+							<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: ${ percent }%;"></div>
+						</div>
+					</li>
+				</ul>
+			`);
+			existingRow.find('td:eq(3)').html(`<span class="badge badge-${status_color}-lighten">${status_value}</span>`);
+			existingRow.find('td:eq(4)').html(`<span class="badge badge-${publish_color}-lighten">${publish_value}</span>`);
+			existingRow.find('td:eq(5)').text(formatDate(created_at));
 			return; 
 		}
 	}
@@ -258,15 +320,27 @@ async function addItem(){
 	const id = parseInt(button.data('update-id'))
 
 	const formData = new FormData();
+	formData.append('title', title.val());
+	formData.append('content', content.val());
 	for (let i = 0; i < imageStorage.length; i++) {
 		const existingImage = $(`#rows-image-${ i }`).length
 		if(existingImage == 1){
 			formData.append('attachment[]', imageStorage[i]);
 		}
 	}
-	formData.append('title', title.val());
-	formData.append('content', content.val());
-	formData.append('status', statused.val());
+	const subtasks = [];
+	for (let e = 0; e < subTaskCounter; e++) {
+		const existingSubTask = $(`#subTask-item-${ e }`).length
+		if(existingSubTask == 1){
+			subtasks.push({
+				name: $(`#subTask-title-${ e }`).text(),
+				is_done: $(`#subTask-${ e }`).is(':checked'),
+			})
+		}
+	}
+	let completedTasks = subtasks.filter(sub => sub.is_done).length === subtasks.length;
+	formData.append('subtask', JSON.stringify(subtasks));
+	formData.append('status', (completedTasks ? '2' : (statused.val() == '2' && !completedTasks ? '1' : statused.val())));
 	formData.append('is_published', (publish.is(':checked') ? 1 : 0));
 	
 	try {
@@ -294,7 +368,7 @@ async function addItem(){
 			taskModal.modal('hide')
 		}
 		
-		addRows(task.id, task.title, task.status, task.is_published, task.created_at, id)
+		addRows(task.id, task.title, task.subtask, task.status, task.is_published, task.created_at, id)
       setTimeout(function () {
          button.prop('disabled', false);
          buttonText.text('Save');
@@ -367,6 +441,25 @@ async function updateItem(id){
 		`);
 	}
 
+	subTaskList.empty()
+	const jsonSubTask = JSON.parse(task.subtask)
+	for (let index = 0; index < jsonSubTask.length; index++) {
+		const el = jsonSubTask[index];
+		
+		subTaskList.prepend(`
+			<li class="list-group-item d-flex justify-content-between align-items-center" id="subTask-item-${ index }">
+				<div>
+					<input class="form-check-input me-1" type="checkbox" value="" id="subTask-${ index }">
+					<label class="form-check-label" for="subTask-${ index }"  id="subTask-title-${ index }">${ el.name }</label>
+				</div>
+				<i class="ri-delete-bin-line" role="button" onclick="deleteSubTask('subTask-item-${ index }', ${ task.id })"></i>
+			</li>
+		`);
+		
+		$(`#subTask-${ index }`).prop('checked', el.is_done);
+	}
+	subTaskCounter = jsonSubTask.length
+
 	button.data('update-id', task.id)
 	title.val(task.title)
 	content.val(task.content)
@@ -400,6 +493,25 @@ function deleteImage(elementId, id = 0){
 		const index = elementId.split('-').pop();
 		$.ajax({
 			url: `${ baseUrl }/api/task/image/${ id }`,
+			type: 'DELETE',
+			dataType: 'json',
+			data: { deletedIndex: index },
+			headers:{
+				'Authorization':`Bearer ${ token }`,
+			}
+		});
+	}
+}
+
+function deleteSubTask(elementId, id = 0){
+	if(id == 0){
+		$(`#${ elementId }`).remove()
+	}
+	else {
+		$(`#${ elementId }`).remove()
+		const index = elementId.split('-').pop();
+		$.ajax({
+			url: `${ baseUrl }/api/task/subtask/${ id }`,
 			type: 'DELETE',
 			dataType: 'json',
 			data: { deletedIndex: index },
