@@ -18,6 +18,10 @@ The Todo application is a task management tool designed to help users organize t
    git clone https://github.com/CrisDismaya/todo-app-web.git && cd todo-app-web
    ```
 
+### Default Account
+- email: User@app.com
+- pass: password
+
 <!-- MARKDOWN LINKS & IMAGES -->
 [Php]: https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white
 [Php-url]: https://www.php.net/
