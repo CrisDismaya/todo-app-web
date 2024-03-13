@@ -3,7 +3,7 @@
 <!-- Mirrored from coderthemes.com/hyper/saas/layouts-fullscreen.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 22 Jan 2024 04:34:31 GMT -->
 <head>
 	<meta charset="utf-8" />
-	<title> Dashboard | Task App</title>
+	<title> Trash | Task App </title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- App favicon -->
@@ -88,14 +88,15 @@
 					
 					<div class="row pt-3">
 						<div class="col-xl-12 col-lg-12">
+							<div class="alert alert-info" role="alert">
+								<i class="ri-information-line me-1 align-middle font-16"></i> All deleted items are automatically removed after a period of 30 days.
+							</div>
+						</div>
+						
+						<div class="col-xl-12 col-lg-12">
 							<div class="card card-h-100">
 								<div class="d-flex card-header justify-content-between align-items-center">
-									<h4 class="header-title"> Task List</h4>
-									<div class="dropdown">
-										<a href="javascript:void(0);" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#task-modal" onclick="clearFields()">
-											<i class="mdi mdi-plus"></i> Add Task
-										</a>
-									</div>
+									<h4 class="header-title"> Task Trash </h4>
 								</div>
 								<div class="card-body pt-0">
 									<div class="row mb-2">
@@ -143,7 +144,8 @@
 													<th>Subtask Progress</th>
 													<th>Status</th>
 													<th>Published</th>
-													<th>Start Date</th>
+													<th>Deleted Date</th>
+													<th>Days left</th>
 													<th>Action</th>
 												</tr>
 											</thead>
@@ -214,8 +216,8 @@
 					<div class="mb-2 row">
 						<label class="col-sm-2 col-form-label col-form-label-sm">Attachments <small><span class="text-muted">(Optional)</span></small></label>
 						<div class="col-sm-10">
-							<input type="file" id="task-attachment" name="task-attachment[]" class="form-control form-control-sm" accept="image/*" multiple>
-							<small><i><span class="text-muted">Note: Upload attachement below 4MB</span></i></small>
+							<!-- <input type="file" id="task-attachment" name="task-attachment[]" class="form-control form-control-sm" accept="image/*" multiple>
+							<small><i><span class="text-muted">Note: Upload attachement below 4MB</span></i></small> -->
 
 							<div id="task-attachment-preview" class="row mx-n1 g-0">
 
@@ -225,7 +227,7 @@
 					<div class="mb-2 row">
 						<label for="task-status" class="col-sm-2 col-form-label col-form-label-sm">Status</label>
 						<div class="col-sm-10">
-							<select class="form-select form-control-sm" id="task-status">
+							<select class="form-select form-control-sm" id="task-status" disabled>
 								<option value="">Select Status</option>
 								<option value="0">To-do</option>
 								<option value="1">In-progress</option>
@@ -237,7 +239,7 @@
 					<div class="mb-2 row">
 						<label for="task-title" class="col-sm-2 col-form-label col-form-label-sm">Published</label>
 						<div class="col-sm-10" style="vertical-align:middle;">
-							<input type="checkbox" id="task-publish" checked data-switch="bool"/>
+							<input type="checkbox" id="task-publish" checked data-switch="bool" disabled/>
 							<label for="task-publish" data-on-label="On" data-off-label="Off"></label>
 						</div>
 					</div>
@@ -245,22 +247,18 @@
 					<div class="mb-2 row">
 						<label for="task-subtask" class="col-sm-2 col-form-label col-form-label-sm">Subtask</label>
 						<div class="col-sm-10" style="vertical-align:middle;">
-							<div class="input-group">
+							<!-- <div class="input-group">
 								<input type="text" id="task-subtask-title" class="form-control form-control-sm" placeholder="Enter subtask" autocomplete="off">
 								<button id="task-subtask-add" type="button" class="btn btn-outline-secondary">
 									<i class="mdi mdi-plus"></i> Add Subtask
 								</button>
-						  </div>
+						  </div> -->
 						  <ul class="list-group mt-2" id="task-subtask-list"></ul>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button id="task-action" type="button" class="btn btn-success" data-update-id="0">
-						<span id="title">Save</span>
-						<span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>
-					</button>
 				</div> <!-- end modal footer -->
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
@@ -271,7 +269,7 @@
 
 	<!-- App js -->
 	<script src="assets/js/general.js"></script>
-	<script src="assets/js/pages/demo.todo.js"></script>
+	<script src="assets/js/pages/demo.remove.task.js"></script>
 	<script src="assets/js/app.min.js"></script>
 
 </body>

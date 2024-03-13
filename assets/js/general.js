@@ -17,8 +17,6 @@ $(document).ready(function() {
    $('#user-name').text(names)
 });
 
-
-
 function isAuthenticated() {
    const authStatus = localStorage.getItem('auth');
    return authStatus === 'true';

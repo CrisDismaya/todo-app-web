@@ -19,8 +19,8 @@ The Todo application is a task management tool designed to help users organize t
    ```
 
 ### Default Account
-- email: User@app.com
-- pass: password
+- email: user@app.com
+- pass: user123
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [Php]: https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white

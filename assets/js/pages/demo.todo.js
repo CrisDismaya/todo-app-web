@@ -373,7 +373,7 @@ async function addItem(){
          button.prop('disabled', false);
          buttonText.text('Save');
          buttonSpinner.hide();
-      }, 2000);
+      }, 1500);
 
 	} catch (error) {
 		const status_code = error.status;

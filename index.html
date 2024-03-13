@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Log In | To-do App</title>
+    <title>Log In | Task App</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
@@ -20,6 +20,14 @@
 </head>
 
 <body class="authentication-bg position-relative">
+    <!-- Pre-loader -->
+	<div id="preloader">
+		<div id="status">
+			 <div class="bouncing-loader"><div ></div><div ></div><div ></div></div>
+		</div>
+	</div>
+	<!-- End Preloader-->
+    
     <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5 position-relative">
         <div class="container">
             <div class="row justify-content-center">

@@ -1,11 +1,10 @@
 
-const names = $('#name');
+const name = $('#name');
 const email = $('#email');
 const password = $('#password');
 const button = $('#signup');
 const buttonText = button.find('#title');
 const buttonSpinner = button.find('#spinner');
-
 
 $(document).ready(function() {
    buttonSpinner.hide()
@@ -29,20 +28,20 @@ async function signup(){
          type: 'POST',
          dataType: 'json',
          data: {
-            name: names.val(),
+            name: name.val(),
             email: email.val(),
             password: password.val()
          }, 
       });
-      names.val('')
+      name.val('')
       email.val('')
       password.val('')
-      alert(`Account ${ names.val() } Successfully Registered!`)
+      alert(`Account ${ name.val() } Successfully Registered!`)
       setTimeout(function () {
          button.prop('disabled', false);
          buttonText.text('Sign up');
          buttonSpinner.hide();
-      }, 3000);
+      }, 1500);
       
    } catch(error){
       const status_code = error.status;
