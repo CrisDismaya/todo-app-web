@@ -15,7 +15,7 @@ The Todo application is a task management tool designed to help users organize t
 
 2. Clone the repo
    ```sh
-   git clone https://github.com/CrisDismaya/chat-app-api.git && cd chat-app-api
+   git clone https://github.com/CrisDismaya/todo-app-web.git && cd todo-app-web
    ```
 
 <!-- MARKDOWN LINKS & IMAGES -->
