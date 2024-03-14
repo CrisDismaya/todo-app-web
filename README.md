@@ -1,6 +1,6 @@
-# Todo Application API
+# Task Application API
 
-The Todo application is a task management tool designed to help users organize their daily tasks efficiently.
+The Task application is a task management tool designed to help users organize their daily tasks efficiently.
 
 ### Built With
 
@@ -13,7 +13,7 @@ The Todo application is a task management tool designed to help users organize t
 
 1. Install XAMPP Control Panel
 
-2. Clone the repo
+2. Extract zip file in htdocs (xampp)
    ```sh
    git clone https://github.com/CrisDismaya/todo-app-web.git && cd todo-app-web
    ```
